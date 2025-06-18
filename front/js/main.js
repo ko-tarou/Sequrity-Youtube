@@ -8,8 +8,8 @@ function renderVideos(filteredVideos) {
     card.className = "video-card";
 
     card.innerHTML = `
-      <a href="video.html?id=${video.id}" clss="cards">
-        <section class="video-card">
+      <a href="video.html?id=${video.id}">
+        <section>
           <img src="${video.thumbnail}" alt="${video.title}" class="video-thumbnail">
           <div class="video-details">
             <img src="${video.channelicon}" alt="${video.channel}" class="channel-icon">

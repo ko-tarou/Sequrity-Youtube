@@ -4,14 +4,21 @@
 }
 .cards{
   display: inline-block;
-
+}
+.channel{
+  border: #f9f9f9;
+}
+#video-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: flex-start;
 }
 .video-card {
   width: 320px;
-  background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  margin: 20px auto;
+  margin: 8px 8px;
 }
 
 .video-thumbnail {
@@ -102,4 +109,12 @@
   padding: 12px;
   font-size: 15px;
   display: flex;
+}
+.video-h1{
+  color: #000000;
+  font-size:x-large;
+}
+#main-video {
+  display: block;
+  margin: 20px auto;
 }
