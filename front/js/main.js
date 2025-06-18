@@ -35,3 +35,13 @@ searchInput.addEventListener("input", () => {
   );
   renderVideos(filtered);
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+  const hamburger = document.querySelector('.hamburger');
+  const nav = document.getElementById('menu');
+
+  hamburger.addEventListener('click', function () {
+    nav.classList.toggle('is_active');
+  });
+});
+
