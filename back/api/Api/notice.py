@@ -1,17 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from db.database import SessionLocal
 from schemas.notice import NoticeCreate, NoticeRead
 from crud import notice as crud_notice
+from db.database import get_db
 
 router = APIRouter(prefix="/notices", tags=["Notices"])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @router.post("/", response_model=NoticeRead)
 def create_notice_api(notice: NoticeCreate, db: Session = Depends(get_db)):

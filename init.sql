@@ -1,3 +1,4 @@
+
 -- ユーザー情報
 CREATE TABLE user (
     user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -91,3 +92,4 @@ CREATE TABLE notice (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (receive_user_id) REFERENCES user(user_id)
 );
+
