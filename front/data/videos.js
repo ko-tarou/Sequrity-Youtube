@@ -3,7 +3,9 @@ const videos = [
   {
     id: 1,
     title: "空気読む力、足りてますか？俺は足りてるつもり【みんなで空気読み4】",
+
     url: "assets/IMG_6816.mp4",
+
     thumbnail: "https://img.youtube.com/vi/eGHqQSZqGyo/0.jpg",
     description: "空気読む力、足りてますか？俺は足りてるつもり【みんなで空気読み4】",
     channel:"らっだぁ",

@@ -416,4 +416,5 @@ likeBtn.addEventListener('click', handleLike);
 dislikeBtn.addEventListener('click', handleDislike);
 
 loadLikes();
+
 loadComments();
