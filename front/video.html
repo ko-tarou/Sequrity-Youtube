@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <title>SecProTube</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+    <div id="video-container">
+        
+        <iframe id="main-video" controls width="560" height="315" frameborder="0" allowfullscreen></iframe>
+        <h1 id="video-title" class="video-h1">動画タイトル</h1>
+        <p id="video-description">動画の説明がここに入ります</p>
+        <h2>コメント</h2>
+
+        <form id="comment-form">
+            <input type="text" id="comment-input" placeholder="コメントを入力..." required>
+            <button type="submit">投稿</button>
+        </form>
+
+        <ul id="comment-list"></ul>
+        <a href="index.html">← 一覧に戻る</a>
+    </div>
+
+    <script src="data/videos.js"></script>
+    <script src="js/video.js"></script>
+</body>
+
+</html>
