@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from db.models import ChannelSubscription
-from schemas.channel_subscription import ChannelSubscriptionCreate
+from ..db.models import ChannelSubscription
+from ..schemas.channel_subscription import ChannelSubscriptionCreate
 
 def create_channel_subscription(db: Session, sub: ChannelSubscriptionCreate):
     db_subscription = ChannelSubscription(

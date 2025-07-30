@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from db.database import get_db
-from schemas.video import VideoCreate
-from crud import video as crud_video
+from ..schemas.video import VideoCreate
+from ..db.database import get_db
+from ..crud import video as crud_video
 
 router = APIRouter(prefix="/videos", tags=["Videos"])
 

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from db.database import get_db
-from schemas.channel_subscription import ChannelSubscriptionCreate
-from crud import channel_subscription as crud_channel_subscription
+from ..schemas.channel_subscription import ChannelSubscriptionCreate
+from ..db.database import get_db
+from ..crud import channel_subscription as crud_channel_subscription
 
 router = APIRouter(prefix="/channel-subscriptions", tags=["Channel Subscriptions"])
 

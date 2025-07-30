@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from db.models import Notice
-from schemas.notice import NoticeCreate
+from ..db.models import Notice
+from ..schemas.notice import NoticeCreate
 
 def create_notice(db: Session, notice: NoticeCreate):
     db_notice = Notice(receive_user_id=notice.receive_user_id)

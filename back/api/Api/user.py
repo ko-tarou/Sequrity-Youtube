@@ -1,8 +1,8 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from schemas.user import UserCreate
-from crud import user as crud_user
-from db.database import get_db
+from ..schemas.user import UserCreate
+from ..db.database import get_db
+from ..crud import user as crud_user
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
