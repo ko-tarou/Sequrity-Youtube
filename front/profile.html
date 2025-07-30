@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>プロフィール - SecProTube</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-play-circle"></i> SecProTube
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">
+                    <i class="fas fa-home"></i> ホーム
+                </a>
+                <a href="upload.html">
+                    <i class="fas fa-upload"></i> アップロード
+                </a>
+                <a href="profile.html" class="active">
+                    <i class="fas fa-user"></i> プロフィール
+                </a>
+            </nav>
+            <div class="auth-buttons">
+                <button id="logout-btn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> ログアウト
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="profile-page-container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar">
+                    <img id="user-avatar" src="" alt="プロフィール画像">
+                    <button class="avatar-edit-btn" id="avatar-edit-btn">
+                        <i class="fas fa-camera"></i>
+                    </button>
+                </div>
+                <div class="profile-info">
+                    <h1 id="user-name">ユーザー名</h1>
+                    <p id="user-email">user@example.com</p>
+                    <div class="profile-stats">
+                        <div class="stat-item">
+                            <span class="stat-number" id="video-count">0</span>
+                            <span class="stat-label">動画</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="subscriber-count">0</span>
+                            <span class="stat-label">登録者</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-number" id="view-count">0</span>
+                            <span class="stat-label">総視聴回数</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn-primary" id="edit-profile-btn">
+                        <i class="fas fa-edit"></i> プロフィール編集
+                    </button>
+                </div>
+            </div>
+
+            <!-- Profile Tabs -->
+            <div class="profile-tabs">
+                <button class="tab-btn active" data-tab="videos">
+                    <i class="fas fa-video"></i> 動画
+                </button>
+                <button class="tab-btn" data-tab="playlists">
+                    <i class="fas fa-list"></i> プレイリスト
+                </button>
+                <button class="tab-btn" data-tab="liked">
+                    <i class="fas fa-heart"></i> いいねした動画
+                </button>
+                <button class="tab-btn" data-tab="settings">
+                    <i class="fas fa-cog"></i> 設定
+                </button>
+            </div>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Videos Tab -->
+                <div id="videos-tab" class="tab-panel active">
+                    <div class="section-header">
+                        <h2>アップロードした動画</h2>
+                        <a href="upload.html" class="btn-primary">
+                            <i class="fas fa-upload"></i> 新しい動画をアップロード
+                        </a>
+                    </div>
+                    <div id="user-videos" class="video-grid">
+                        <!-- User videos will be loaded here -->
+                    </div>
+                    <div id="no-videos" class="no-content" style="display: none;">
+                        <i class="fas fa-video"></i>
+                        <h3>まだ動画がありません</h3>
+                        <p>最初の動画をアップロードしてみましょう！</p>
+                        <a href="upload.html" class="btn-primary">
+                            <i class="fas fa-upload"></i> 動画をアップロード
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Playlists Tab -->
+                <div id="playlists-tab" class="tab-panel">
+                    <div class="section-header">
+                        <h2>プレイリスト</h2>
+                        <button class="btn-primary" id="create-playlist-btn">
+                            <i class="fas fa-plus"></i> プレイリスト作成
+                        </button>
+                    </div>
+                    <div id="user-playlists" class="playlist-grid">
+                        <!-- Playlists will be loaded here -->
+                    </div>
+                    <div id="no-playlists" class="no-content" style="display: none;">
+                        <i class="fas fa-list"></i>
+                        <h3>プレイリストがありません</h3>
+                        <p>お気に入りの動画をプレイリストにまとめましょう！</p>
+                        <button class="btn-primary" id="create-first-playlist-btn">
+                            <i class="fas fa-plus"></i> プレイリストを作成
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Liked Videos Tab -->
+                <div id="liked-tab" class="tab-panel">
+                    <div class="section-header">
+                        <h2>いいねした動画</h2>
+                    </div>
+                    <div id="liked-videos" class="video-grid">
+                        <!-- Liked videos will be loaded here -->
+                    </div>
+                    <div id="no-liked-videos" class="no-content" style="display: none;">
+                        <i class="fas fa-heart"></i>
+                        <h3>いいねした動画がありません</h3>
+                        <p>気に入った動画にいいねをしてみましょう！</p>
+                    </div>
+                </div>
+
+                <!-- Settings Tab -->
+                <div id="settings-tab" class="tab-panel">
+                    <div class="settings-section">
+                        <h2>アカウント設定</h2>
+                        <form id="profile-form" class="settings-form">
+                            <div class="form-group">
+                                <label for="edit-username">
+                                    <i class="fas fa-user"></i> ユーザー名
+                                </label>
+                                <input type="text" id="edit-username" name="username" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-email">
+                                    <i class="fas fa-envelope"></i> メールアドレス
+                                </label>
+                                <input type="email" id="edit-email" name="email" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="edit-bio">
+                                    <i class="fas fa-align-left"></i> 自己紹介
+                                </label>
+                                <textarea id="edit-bio" name="bio" class="form-input" rows="4"></textarea>
+                            </div>
+                            <button type="submit" class="form-button">
+                                <i class="fas fa-save"></i> 変更を保存
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2>パスワード変更</h2>
+                        <form id="password-form" class="settings-form">
+                            <div class="form-group">
+                                <label for="current-password">
+                                    <i class="fas fa-lock"></i> 現在のパスワード
+                                </label>
+                                <input type="password" id="current-password" name="current-password" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="new-password">
+                                    <i class="fas fa-lock"></i> 新しいパスワード
+                                </label>
+                                <input type="password" id="new-password" name="new-password" class="form-input">
+                            </div>
+                            <div class="form-group">
+                                <label for="confirm-new-password">
+                                    <i class="fas fa-lock"></i> 新しいパスワード確認
+                                </label>
+                                <input type="password" id="confirm-new-password" name="confirm-new-password" class="form-input">
+                            </div>
+                            <button type="submit" class="form-button">
+                                <i class="fas fa-key"></i> パスワード変更
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="settings-section">
+                        <h2>アカウント削除</h2>
+                        <p class="warning-text">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            アカウントを削除すると、すべてのデータが完全に削除され、復元できません。
+                        </p>
+                        <button class="btn-danger" id="delete-account-btn">
+                            <i class="fas fa-trash"></i> アカウント削除
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Edit Profile Modal -->
+    <div id="edit-profile-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> プロフィール編集</h2>
+                <button class="modal-close" id="edit-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="modal-profile-form" class="auth-form">
+                <div class="form-group">
+                    <label for="modal-username">ユーザー名</label>
+                    <input type="text" id="modal-username" name="username" class="form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-bio">自己紹介</label>
+                    <textarea id="modal-bio" name="bio" class="form-input" rows="3"></textarea>
+                </div>
+                <button type="submit" class="form-button">
+                    <i class="fas fa-save"></i> 保存
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Account Modal -->
+    <div id="delete-account-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-exclamation-triangle"></i> アカウント削除確認</h2>
+                <button class="modal-close" id="delete-modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="delete-warning">
+                <p>この操作は取り消せません。すべてのデータが削除されます。</p>
+                <p>本当にアカウントを削除しますか？</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="cancel-delete-btn">キャンセル</button>
+                <button class="btn-danger" id="confirm-delete-btn">
+                    <i class="fas fa-trash"></i> 削除
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script src="js/profile.js"></script>
+</body>
+</html> 

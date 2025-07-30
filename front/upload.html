@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動画アップロード - SecProTube</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-play-circle"></i> SecProTube
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">
+                    <i class="fas fa-home"></i> ホーム
+                </a>
+                <a href="upload.html" class="active">
+                    <i class="fas fa-upload"></i> アップロード
+                </a>
+                <a href="profile.html" id="profile-link">
+                    <i class="fas fa-user"></i> プロフィール
+                </a>
+            </nav>
+            <div class="auth-buttons">
+                <button id="logout-btn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> ログアウト
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="upload-page-container">
+            <div class="form-container upload-form-container">
+                <div class="form-title">
+                    <i class="fas fa-upload"></i> 動画アップロード
+                </div>
+                <p class="form-description">
+                    新しい動画をアップロードして、視聴者と共有しましょう。
+                </p>
+
+                <form id="upload-form" class="upload-form">
+                    <!-- Video Upload Section -->
+                    <div class="upload-section">
+                        <div class="form-group">
+                            <label for="video-file">
+                                <i class="fas fa-video"></i> 動画ファイル
+                            </label>
+                            <div class="file-upload-area" id="video-upload-area">
+                                <div class="upload-placeholder">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>動画ファイルをドラッグ&ドロップまたはクリックして選択</p>
+                                    <span class="file-types">対応形式: MP4, AVI, MOV, WMV</span>
+                                </div>
+                                <input type="file" id="video-file" name="video-file" accept="video/*" required>
+                            </div>
+                            <div class="file-preview" id="video-preview" style="display: none;">
+                                <video id="video-preview-player" controls>
+                                    <source src="" type="video/mp4">
+                                </video>
+                                <div class="file-info">
+                                    <span id="video-file-name"></span>
+                                    <span id="video-file-size"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Video Details Section -->
+                    <div class="details-section">
+                        <div class="form-group">
+                            <label for="video-title">
+                                <i class="fas fa-heading"></i> タイトル
+                            </label>
+                            <input type="text" id="video-title" name="video-title" class="form-input" 
+                                   placeholder="動画のタイトルを入力してください" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="video-description">
+                                <i class="fas fa-align-left"></i> 説明
+                            </label>
+                            <textarea id="video-description" name="video-description" class="form-input" 
+                                      placeholder="動画の説明を入力してください" rows="4"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="video-category">
+                                <i class="fas fa-tags"></i> カテゴリ
+                            </label>
+                            <select id="video-category" name="video-category" class="form-input">
+                                <option value="">カテゴリを選択</option>
+                                <option value="gaming">ゲーム</option>
+                                <option value="music">音楽</option>
+                                <option value="education">教育</option>
+                                <option value="entertainment">エンターテイメント</option>
+                                <option value="technology">テクノロジー</option>
+                                <option value="lifestyle">ライフスタイル</option>
+                                <option value="sports">スポーツ</option>
+                                <option value="news">ニュース</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="video-thumbnail">
+                                <i class="fas fa-image"></i> サムネイル
+                            </label>
+                            <div class="thumbnail-upload-area" id="thumbnail-upload-area">
+                                <div class="upload-placeholder">
+                                    <i class="fas fa-image"></i>
+                                    <p>サムネイル画像を選択（オプション）</p>
+                                    <span class="file-types">対応形式: JPG, PNG, GIF</span>
+                                </div>
+                                <input type="file" id="video-thumbnail" name="video-thumbnail" accept="image/*">
+                            </div>
+                            <div class="file-preview" id="thumbnail-preview" style="display: none;">
+                                <img id="thumbnail-preview-img" src="" alt="サムネイルプレビュー">
+                                <div class="file-info">
+                                    <span id="thumbnail-file-name"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="video-visibility">
+                                <i class="fas fa-eye"></i> 公開設定
+                            </label>
+                            <select id="video-visibility" name="video-visibility" class="form-input">
+                                <option value="public">公開</option>
+                                <option value="unlisted">限定公開</option>
+                                <option value="private">非公開</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="video-tags">
+                                <i class="fas fa-tags"></i> タグ（カンマ区切り）
+                            </label>
+                            <input type="text" id="video-tags" name="video-tags" class="form-input" 
+                                   placeholder="例: プログラミング, JavaScript, チュートリアル">
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="history.back()">
+                            <i class="fas fa-times"></i> キャンセル
+                        </button>
+                        <button type="submit" class="form-button" id="upload-submit-btn">
+                            <i class="fas fa-upload"></i> アップロード
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Progress Bar -->
+                <div id="progress-container" class="progress-container" style="display: none;">
+                    <div class="progress-info">
+                        <span id="progress-text">アップロード中...</span>
+                        <span id="progress-percentage">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                <div id="error-message" class="message error" style="display: none;"></div>
+                <div id="success-message" class="message success" style="display: none;"></div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/upload.js"></script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ログイン - SecProTube</title>
+    <title>新規登録 - SecProTube</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -14,9 +14,16 @@
                 <i class="fas fa-play-circle"></i>
                 SecProTube
             </div>
-            <p class="form-description">アカウントにログインして動画を楽しもう</p>
+            <p class="form-description">アカウントを作成して動画を楽しもう</p>
             
-            <form id="login-form" class="auth-form">
+            <form id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="username">
+                        <i class="fas fa-user"></i> ユーザー名
+                    </label>
+                    <input type="text" id="username" name="username" class="form-input" required>
+                </div>
+
                 <div class="form-group">
                     <label for="email">
                         <i class="fas fa-envelope"></i> メールアドレス
@@ -30,16 +37,33 @@
                     </label>
                     <input type="password" id="password" name="password" class="form-input" required>
                 </div>
+
+                <div class="form-group">
+                    <label for="confirm-password">
+                        <i class="fas fa-lock"></i> パスワード確認
+                    </label>
+                    <input type="password" id="confirm-password" name="confirm-password" class="form-input" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="terms" name="terms" required>
+                        <span class="checkmark"></span>
+                        <span class="checkbox-text">
+                            <a href="#" target="_blank">利用規約</a>と<a href="#" target="_blank">プライバシーポリシー</a>に同意します
+                        </span>
+                    </label>
+                </div>
                 
                 <div class="form-group">
                     <button type="submit" class="form-button">
-                        <i class="fas fa-sign-in-alt"></i> ログイン
+                        <i class="fas fa-user-plus"></i> アカウント作成
                     </button>
                 </div>
                 
                 <div class="auth-links">
-                    <a href="register.html">
-                        <i class="fas fa-user-plus"></i> 新規登録はこちら
+                    <a href="login.html">
+                        <i class="fas fa-sign-in-alt"></i> すでにアカウントをお持ちの方はこちら
                     </a>
                 </div>
             </form>
@@ -50,6 +74,6 @@
     </div>
     
     <script src="js/api.js"></script>
-    <script src="js/login.js"></script>
+    <script src="js/register.js"></script>
 </body>
-</html>
+</html> 

@@ -1,4 +1,5 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
+from sqlalchemy.sql import func
 from api.db.database import Base
 
 
@@ -30,8 +31,18 @@ class Video(Base):
     __tablename__ = "videos"
 
     video_id = Column(Integer, primary_key=True, index=True)
+    title = Column(String, nullable=False)
+    description = Column(String, nullable=True)
+    url = Column(String, nullable=False)
+    thumbnail = Column(String, nullable=True)
     channel_id = Column(Integer, ForeignKey("channels.channel_id"), nullable=False)
     create_user_id = Column(Integer, ForeignKey("users.user_id"), nullable=False)
+    views = Column(Integer, default=0)
+    likes = Column(Integer, default=0)
+    dislikes = Column(Integer, default=0)
+    duration = Column(String, nullable=True)
+    upload_date = Column(DateTime, default=func.now())
+    category = Column(String, nullable=True)
 
 class Category(Base):
     __tablename__ = "categories"
