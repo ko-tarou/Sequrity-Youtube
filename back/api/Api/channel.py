@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, status
 from sqlalchemy.orm import Session
-from db.database import get_db
-from schemas.channel import ChannelCreate
-from crud import channel as crud_channel
+from ..schemas.channel import ChannelCreate
+from ..db.database import get_db
+from ..crud import channel as crud_channel
 
 router = APIRouter(prefix="/channels", tags=["Channels"])
 

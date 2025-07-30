@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey
-from da.database import Base
+from api.db.database import Base
 
 
 class Notice(Base):

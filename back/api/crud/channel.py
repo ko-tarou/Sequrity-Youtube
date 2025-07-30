@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
-from db.models import Channel
-from schemas.channel import ChannelCreate
+from ..db.models import Channel
+from ..schemas.channel import ChannelCreate
 
 def create_channel(db: Session, channel: ChannelCreate):
     db_channel = Channel(

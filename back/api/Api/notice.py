@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from schemas.notice import NoticeCreate, NoticeRead
-from crud import notice as crud_notice
-from db.database import get_db
+from ..schemas.notice import NoticeCreate, NoticeRead
+from ..crud import notice as crud_notice
+from ..db.database import get_db
 
 router = APIRouter(prefix="/notices", tags=["Notices"])
 
