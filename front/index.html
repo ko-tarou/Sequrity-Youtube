@@ -1,19 +1,146 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecProTube</title>
+    <title>SecProTube - ホーム</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-
 <body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-play-circle"></i> SecProTube
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="active">
+                    <i class="fas fa-home"></i> ホーム
+                </a>
+                <a href="upload.html" id="upload-link" style="display: none;">
+                    <i class="fas fa-upload"></i> アップロード
+                </a>
+                <a href="profile.html" id="profile-link" style="display: none;">
+                    <i class="fas fa-user"></i> プロフィール
+                </a>
+                <a href="channel-create.html" id="channel-link" style="display: none;">
+                    <i class="fas fa-plus"></i> チャンネル作成
+                </a>
+            </nav>
+            <div class="auth-buttons">
+                <button id="login-btn" class="btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> ログイン
+                </button>
+                <button id="logout-btn" class="btn-logout" style="display: none;">
+                    <i class="fas fa-sign-out-alt"></i> ログアウト
+                </button>
+            </div>
+        </div>
+    </header>
 
-    <input type="text" id="search-input" placeholder="動画を検索" />
-    <div id="video-list"></div>
+    <!-- Main Content -->
+    <main class="main-container">
+        <!-- Search Section -->
+        <div class="search-container">
+            <div class="search-wrapper">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" id="search-input" placeholder="動画を検索..." />
+                <button id="search-btn" class="search-btn">
+                    <i class="fas fa-search"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Category Filter -->
+        <div class="category-filter">
+            <button class="category-btn active" data-category="all">
+                <i class="fas fa-th"></i> すべて
+            </button>
+            <button class="category-btn" data-category="gaming">
+                <i class="fas fa-gamepad"></i> ゲーム
+            </button>
+            <button class="category-btn" data-category="music">
+                <i class="fas fa-music"></i> 音楽
+            </button>
+            <button class="category-btn" data-category="education">
+                <i class="fas fa-graduation-cap"></i> 教育
+            </button>
+            <button class="category-btn" data-category="technology">
+                <i class="fas fa-microchip"></i> テクノロジー
+            </button>
+            <button class="category-btn" data-category="entertainment">
+                <i class="fas fa-film"></i> エンターテイメント
+            </button>
+        </div>
+
+        <!-- Channel Create Section (for non-logged users) -->
+        <div class="channel-create-section" id="channel-create-section" style="display: none;">
+            <div class="form-container">
+                <div class="form-title">
+                    <i class="fas fa-plus-circle"></i>
+                    チャンネルを作成
+                </div>
+                <p class="form-description">
+                    動画をアップロードするには、まずチャンネルを作成してください。
+                </p>
+                <a href="channel-create.html" class="form-button">
+                    <i class="fas fa-plus"></i> チャンネル作成
+                </a>
+            </div>
+        </div>
+
+        <!-- Video Grid -->
+        <div id="video-list" class="video-grid">
+            <!-- Videos will be loaded here -->
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading" class="loading-container" style="display: none;">
+            <div class="loading">
+                <i class="fas fa-spinner fa-spin"></i>
+                <p>動画を読み込み中...</p>
+            </div>
+        </div>
+
+        <!-- No Results -->
+        <div id="no-results" class="no-results" style="display: none;">
+            <i class="fas fa-search"></i>
+            <h3>検索結果が見つかりません</h3>
+            <p>別のキーワードで検索してみてください。</p>
+        </div>
+    </main>
+
+    <!-- Login Modal -->
+    <div id="login-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-sign-in-alt"></i> ログイン</h2>
+                <button class="modal-close" id="modal-close">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="modal-email">メールアドレス</label>
+                    <input type="email" id="modal-email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label for="modal-password">パスワード</label>
+                    <input type="password" id="modal-password" name="password" required>
+                </div>
+                <button type="submit" class="form-button">
+                    <i class="fas fa-sign-in-alt"></i> ログイン
+                </button>
+            </form>
+            <div class="auth-links">
+                <a href="register.html">新規登録はこちら</a>
+            </div>
+        </div>
+    </div>
+
     <script src="data/videos.js"></script>
+    <script src="js/api.js"></script>
     <script src="js/main.js"></script>
 </body>
-
 </html>

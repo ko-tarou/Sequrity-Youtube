@@ -1,89 +1,223 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
     <meta charset="UTF-8">
-    <title>SecProTube</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>動画視聴 - SecProTube</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-
 <body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-play-circle"></i> SecProTube
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">
+                    <i class="fas fa-home"></i> ホーム
+                </a>
+                <a href="upload.html" id="upload-link" style="display: none;">
+                    <i class="fas fa-upload"></i> アップロード
+                </a>
+                <a href="profile.html" id="profile-link" style="display: none;">
+                    <i class="fas fa-user"></i> プロフィール
+                </a>
+                <a href="channel-create.html" id="channel-link" style="display: none;">
+                    <i class="fas fa-plus"></i> チャンネル作成
+                </a>
+            </nav>
+            <div class="auth-buttons">
+                <button id="login-btn" class="btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> ログイン
+                </button>
+                <button id="logout-btn" class="btn-logout" style="display: none;">
+                    <i class="fas fa-sign-out-alt"></i> ログアウト
+                </button>
+            </div>
+        </div>
+    </header>
 
-    <div id="video-container">
-        <div class="custom-video-player">
-            <video id="main-video" preload="metadata">
-                <source src="" type="video/mp4">
-                このブラウザでは動画再生できません
-            </video>
-            
-            <div class="video-controls">
-                <div class="progress-container">
-                    <div class="progress-bar">
-                        <div class="progress-filled"></div>
-                    </div>
-                </div>
-                
-                <div class="controls-main">
-                    <button class="play-pause-btn">▶</button>
-                    <div class="time-display">
-                        <span class="current-time">0:00</span>
-                        <span>/</span>
-                        <span class="total-time">0:00</span>
-                    </div>
-                    <div class="volume-container">
-                        <button class="mute-btn">🔈</button>
-                        <input type="range" class="volume-slider" min="0" max="1" step="0.1" value="1">
-                    </div>
-                    <div class="speed-container">
-                        <button class="speed-btn">1x</button>
-                        <div class="speed-menu">
-                            <button class="speed-option" data-speed="0.5">0.5x</button>
-                            <button class="speed-option" data-speed="0.75">0.75x</button>
-                            <button class="speed-option" data-speed="1">1x</button>
-                            <button class="speed-option" data-speed="1.25">1.25x</button>
-                            <button class="speed-option" data-speed="1.5">1.5x</button>
-                            <button class="speed-option" data-speed="2">2x</button>
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="video-page-container">
+            <!-- Video Player Section -->
+            <div class="video-player-section">
+                <div class="video-container" id="video-container">
+                    <!-- YouTube埋め込み動画 -->
+                    <iframe id="youtube-player" 
+                            width="100%" 
+                            height="100%" 
+                            frameborder="0" 
+                            allowfullscreen
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                            style="display: none;">
+                    </iframe>
+                    
+                    <!-- カスタム動画プレイヤー（フォールバック用） -->
+                    <div class="custom-video-player" id="custom-video-player" style="display: none;">
+                        <video id="video-player" controls preload="metadata">
+                            <source src="" type="video/mp4">
+                            お使いのブラウザは動画再生に対応していません。
+                        </video>
+                        <div class="video-controls">
+                            <div class="progress-container">
+                                <div class="progress-bar">
+                                    <div class="progress-filled"></div>
+                                </div>
+                            </div>
+                            <div class="controls-main">
+                                <button class="play-pause-btn">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <div class="volume-container">
+                                    <button class="mute-btn">
+                                        <i class="fas fa-volume-up"></i>
+                                    </button>
+                                    <input type="range" class="volume-slider" min="0" max="100" value="100">
+                                </div>
+                                <div class="time-display">
+                                    <span class="current-time">0:00</span> / <span class="total-time">0:00</span>
+                                </div>
+                                <button class="fullscreen-btn">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                    <button class="fullscreen-btn">⛶</button>
+                </div>
+            </div>
+
+            <!-- Video Info Section -->
+            <div class="video-info-section">
+                <div class="video-header">
+                    <h1 id="video-title">動画タイトル</h1>
+                    <div class="video-stats">
+                        <span id="video-views">
+                            <i class="fas fa-eye"></i> 0 回視聴
+                        </span>
+                        <span id="video-date">
+                            <i class="fas fa-calendar"></i> 2024年1月1日
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Video Actions -->
+                <div class="video-actions">
+                    <div class="like-section">
+                        <button id="like-btn" class="like-btn">
+                            <i class="fas fa-thumbs-up like-icon"></i>
+                            <span id="like-count">0</span>
+                        </button>
+                        <button id="dislike-btn" class="dislike-btn">
+                            <i class="fas fa-thumbs-down dislike-icon"></i>
+                            <span id="dislike-count">0</span>
+                        </button>
+                    </div>
+                    <button id="share-btn" class="share-btn">
+                        <i class="fas fa-share"></i> シェア
+                    </button>
+                </div>
+
+                <!-- Channel Info -->
+                <div class="channel-info">
+                    <div class="channel-avatar">
+                        <img id="channel-avatar" src="" alt="チャンネルアバター">
+                    </div>
+                    <div class="channel-details">
+                        <h3 id="channel-name">チャンネル名</h3>
+                        <p id="subscriber-count">
+                            <i class="fas fa-users"></i> 0 登録者
+                        </p>
+                    </div>
+                    <button id="subscribe-btn" class="btn-primary">
+                        <i class="fas fa-bell"></i> 登録
+                    </button>
+                </div>
+
+                <!-- Video Description -->
+                <div class="video-description">
+                    <div class="description-content">
+                        <p id="video-description">動画の説明文がここに表示されます。</p>
+                    </div>
+                    <button class="show-more-btn" id="show-more-btn">
+                        <i class="fas fa-chevron-down"></i> もっと見る
+                    </button>
+                </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="comments-section">
+                <div class="comments-header">
+                    <h3>
+                        <i class="fas fa-comments"></i> コメント
+                        <span id="comment-count">(0)</span>
+                    </h3>
+                </div>
+
+                <!-- Comment Form -->
+                <div class="comment-form-container" id="comment-form-container" style="display: none;">
+                    <div class="comment-input-wrapper">
+                        <textarea id="comment-input" placeholder="コメントを入力..."></textarea>
+                        <button id="comment-submit-btn" class="comment-submit-btn">
+                            <i class="fas fa-paper-plane"></i> コメント投稿
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Login Prompt -->
+                <div class="login-prompt" id="login-prompt">
+                    <div class="prompt-content">
+                        <i class="fas fa-lock"></i>
+                        <p>コメントを投稿するには<a href="login.html">ログイン</a>してください。</p>
+                    </div>
+                </div>
+
+                <!-- Comments List -->
+                <div id="comment-list">
+                    <!-- コメントがここに表示されます -->
+                </div>
+
+                <!-- Loading Comments -->
+                <div id="loading-comments" class="loading-container" style="display: none;">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i>
+                        <p>コメントを読み込み中...</p>
+                    </div>
                 </div>
             </div>
         </div>
-        
-        <h1 id="video-title" class="video-h1">動画タイトル</h1>
-        <p id="video-description">動画の説明がここに入ります</p>
-        
+    </main>
 
-        <div class="video-actions">
-            <div class="like-section">
-                <button class="like-btn" id="like-btn">
-                    <span class="like-icon">👍</span>
-                    <span class="like-count" id="like-count">0</span>
+    <!-- Share Modal -->
+    <div id="share-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-share"></i> シェア</h2>
+                <button class="modal-close" id="share-modal-close">
+                    <i class="fas fa-times"></i>
                 </button>
-                <button class="dislike-btn" id="dislike-btn">
-                    <span class="dislike-icon">👎</span>
-                    <span class="dislike-count" id="dislike-count">0</span>
+            </div>
+            <div class="share-options">
+                <button class="share-option" data-platform="twitter">
+                    <i class="fab fa-twitter"></i> Twitter
+                </button>
+                <button class="share-option" data-platform="facebook">
+                    <i class="fab fa-facebook"></i> Facebook
+                </button>
+                <button class="share-option" data-platform="line">
+                    <i class="fab fa-line"></i> LINE
+                </button>
+                <button class="share-option" data-platform="copy">
+                    <i class="fas fa-link"></i> リンクをコピー
                 </button>
             </div>
         </div>
-        
-        <h2>コメント</h2>
-
-        <div class="comment-form-container">
-            <form id="comment-form">
-                <div class="comment-input-wrapper">
-                    <textarea id="comment-input" placeholder="コメントを入力..." required></textarea>
-                    <button type="submit" class="comment-submit-btn">投稿</button>
-                </div>
-            </form>
-        </div>
-
-        <ul id="comment-list"></ul>
-        <a href="index.html">← 一覧に戻る</a>
     </div>
 
     <script src="data/videos.js"></script>
+    <script src="js/api.js"></script>
     <script src="js/video.js"></script>
 </body>
-
 </html>

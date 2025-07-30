@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>チャンネル作成 - SecProTube</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="nav-container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-play-circle"></i> SecProTube
+            </a>
+            <nav class="nav-links">
+                <a href="index.html">
+                    <i class="fas fa-home"></i> ホーム
+                </a>
+                <a href="upload.html" id="upload-link" style="display: none;">
+                    <i class="fas fa-upload"></i> アップロード
+                </a>
+                <a href="profile.html" id="profile-link">
+                    <i class="fas fa-user"></i> プロフィール
+                </a>
+            </nav>
+            <div class="auth-buttons">
+                <button id="logout-btn" class="btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> ログアウト
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-container">
+        <div class="channel-create-page-container">
+            <div class="form-container channel-create-form">
+                <div class="form-title">
+                    <i class="fas fa-plus-circle"></i> チャンネル作成
+                </div>
+                <p class="form-description">
+                    チャンネルを作成して、動画をアップロードして視聴者と共有しましょう。
+                </p>
+
+                <form id="channel-create-form" class="channel-form">
+                    <!-- Channel Avatar -->
+                    <div class="form-group">
+                        <label for="channel-avatar">
+                            <i class="fas fa-image"></i> チャンネル画像
+                        </label>
+                        <div class="avatar-upload-area" id="avatar-upload-area">
+                            <div class="upload-placeholder">
+                                <i class="fas fa-camera"></i>
+                                <p>チャンネル画像を選択（オプション）</p>
+                                <span class="file-types">推奨サイズ: 800x800px</span>
+                            </div>
+                            <input type="file" id="channel-avatar" name="channel-avatar" accept="image/*">
+                        </div>
+                        <div class="file-preview" id="avatar-preview" style="display: none;">
+                            <img id="avatar-preview-img" src="" alt="チャンネル画像プレビュー">
+                            <div class="file-info">
+                                <span id="avatar-file-name"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Channel Name -->
+                    <div class="form-group">
+                        <label for="channel-name">
+                            <i class="fas fa-tag"></i> チャンネル名
+                        </label>
+                        <input type="text" id="channel-name" name="channel-name" class="form-input" 
+                               placeholder="チャンネル名を入力してください" required>
+                        <small class="form-help">
+                            <i class="fas fa-info-circle"></i> 
+                            チャンネル名は3文字以上50文字以内で入力してください
+                        </small>
+                    </div>
+
+                    <!-- Channel Description -->
+                    <div class="form-group">
+                        <label for="channel-description">
+                            <i class="fas fa-align-left"></i> チャンネル説明
+                        </label>
+                        <textarea id="channel-description" name="channel-description" class="form-input" 
+                                  placeholder="チャンネルの説明を入力してください" rows="4"></textarea>
+                        <small class="form-help">
+                            <i class="fas fa-info-circle"></i> 
+                            チャンネルについて説明してください（最大500文字）
+                        </small>
+                    </div>
+
+                    <!-- Channel Category -->
+                    <div class="form-group">
+                        <label for="channel-category">
+                            <i class="fas fa-tags"></i> メインカテゴリ
+                        </label>
+                        <select id="channel-category" name="channel-category" class="form-input">
+                            <option value="">カテゴリを選択</option>
+                            <option value="gaming">ゲーム</option>
+                            <option value="music">音楽</option>
+                            <option value="education">教育</option>
+                            <option value="entertainment">エンターテイメント</option>
+                            <option value="technology">テクノロジー</option>
+                            <option value="lifestyle">ライフスタイル</option>
+                            <option value="sports">スポーツ</option>
+                            <option value="news">ニュース</option>
+                            <option value="comedy">コメディ</option>
+                            <option value="travel">旅行</option>
+                            <option value="cooking">料理</option>
+                        </select>
+                    </div>
+
+                    <!-- Channel Tags -->
+                    <div class="form-group">
+                        <label for="channel-tags">
+                            <i class="fas fa-tags"></i> タグ（カンマ区切り）
+                        </label>
+                        <input type="text" id="channel-tags" name="channel-tags" class="form-input" 
+                               placeholder="例: プログラミング, チュートリアル, 初心者向け">
+                        <small class="form-help">
+                            <i class="fas fa-info-circle"></i> 
+                            チャンネルの内容を表すタグを入力してください
+                        </small>
+                    </div>
+
+                    <!-- Channel Settings -->
+                    <div class="form-group">
+                        <label for="channel-privacy">
+                            <i class="fas fa-eye"></i> チャンネル公開設定
+                        </label>
+                        <select id="channel-privacy" name="channel-privacy" class="form-input">
+                            <option value="public">公開</option>
+                            <option value="unlisted">限定公開</option>
+                            <option value="private">非公開</option>
+                        </select>
+                        <small class="form-help">
+                            <i class="fas fa-info-circle"></i> 
+                            公開設定は後から変更できます
+                        </small>
+                    </div>
+
+                    <!-- Terms Agreement -->
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="channel-terms" name="channel-terms" required>
+                            <span class="checkmark"></span>
+                            <span class="checkbox-text">
+                                <a href="#" target="_blank">チャンネル利用規約</a>と<a href="#" target="_blank">コミュニティガイドライン</a>に同意します
+                            </span>
+                        </label>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="button" class="btn-secondary" onclick="history.back()">
+                            <i class="fas fa-times"></i> キャンセル
+                        </button>
+                        <button type="submit" class="form-button" id="create-channel-btn">
+                            <i class="fas fa-plus-circle"></i> チャンネル作成
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Progress Bar -->
+                <div id="progress-container" class="progress-container" style="display: none;">
+                    <div class="progress-info">
+                        <span id="progress-text">チャンネルを作成中...</span>
+                        <span id="progress-percentage">0%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill"></div>
+                    </div>
+                </div>
+
+                <!-- Messages -->
+                <div id="error-message" class="message error" style="display: none;"></div>
+                <div id="success-message" class="message success" style="display: none;"></div>
+            </div>
+
+            <!-- Channel Creation Tips -->
+            <div class="tips-section">
+                <h3><i class="fas fa-lightbulb"></i> チャンネル作成のヒント</h3>
+                <div class="tips-list">
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="tip-content">
+                            <h4>魅力的なチャンネル名</h4>
+                            <p>覚えやすく、検索されやすい名前を選びましょう。</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="tip-content">
+                            <h4>詳細な説明</h4>
+                            <p>チャンネルの内容を詳しく説明して、視聴者を引きつけましょう。</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="tip-content">
+                            <h4>適切なカテゴリ</h4>
+                            <p>チャンネルの内容に合ったカテゴリを選択してください。</p>
+                        </div>
+                    </div>
+                    <div class="tip-item">
+                        <i class="fas fa-check-circle"></i>
+                        <div class="tip-content">
+                            <h4>関連タグ</h4>
+                            <p>視聴者が見つけやすいように関連するタグを設定しましょう。</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="js/api.js"></script>
+    <script src="js/channel-create.js"></script>
+</body>
+</html> 
