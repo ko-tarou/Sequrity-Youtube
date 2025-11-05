@@ -1,0 +1,20 @@
+/* /css/auth.css */
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+  .auth-container {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .auth-container {
+    padding: 1rem;
+  }
+} 

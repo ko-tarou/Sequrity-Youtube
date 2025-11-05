@@ -1,7 +1,7 @@
 // APIクライアント
 class ApiClient {
     constructor() {
-        this.baseUrl = 'http://localhost:8001'; // FastAPIのポート8001
+        this.baseUrl = 'http://localhost:8000'; // FastAPIのポート8001
     }
 
     // 認証ヘッダーを取得
@@ -32,7 +32,7 @@ class ApiClient {
 
     // 新規登録
     async register(username, email, password) {
-        const response = await fetch(`${this.baseUrl}/auth/register`, {
+        const response = await fetch(`${this.baseUrl}/users/`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

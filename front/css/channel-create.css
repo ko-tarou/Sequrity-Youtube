@@ -1,0 +1,80 @@
+/* /css/channel-create.css */
+
+.channel-create-page-container {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.channel-create-form {
+  max-width: none;
+  margin: 0;
+}
+
+.channel-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* アバターアップロードエリア */
+.avatar-upload-area {
+  border: 2px dashed #34495e;
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #2c3e50;
+}
+
+.avatar-upload-area:hover {
+  border-color: #e74c3c;
+  background: #34495e;
+}
+
+.avatar-upload-area .upload-placeholder {
+  color: #bdc3c7;
+}
+
+.avatar-upload-area .upload-placeholder i {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: #34495e;
+}
+
+.avatar-upload-area .upload-placeholder p {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+}
+
+.avatar-upload-area .file-types {
+  font-size: 0.9rem;
+  color: #95a5a6;
+}
+
+/* アバタープレビュー */
+#avatar-preview {
+  margin-top: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+#avatar-preview-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* レスポンシブデザイン */
+@media (max-width: 768px) {
+  .channel-create-page-container {
+    margin: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .channel-create-page-container {
+    margin: 1rem;
+  }
+} 

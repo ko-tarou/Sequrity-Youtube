@@ -6,8 +6,6 @@ const profileLink = document.getElementById("profile-link");
 const uploadLink = document.getElementById("upload-link");
 const channelLink = document.getElementById("channel-link");
 const channelCreateSection = document.getElementById("channel-create-section");
-const loginModal = document.getElementById("login-modal");
-const modalClose = document.getElementById("modal-close");
 
 // 認証状態の管理
 function checkAuthStatus() {
@@ -43,7 +41,7 @@ function checkAuthStatus() {
 
 // ログインボタンの処理
 loginBtn.addEventListener('click', function() {
-    showLoginModal();
+    window.location.href = 'login.html';
 });
 
 // ログアウトボタンの処理
@@ -53,58 +51,6 @@ logoutBtn.addEventListener('click', function() {
     localStorage.removeItem('channel');
     window.location.href = 'index.html';
 });
-
-// ログインモーダルの表示
-function showLoginModal() {
-    if (loginModal) {
-        loginModal.style.display = 'flex';
-    } else {
-        // モーダルがない場合はログインページに遷移
-        window.location.href = 'login.html';
-    }
-}
-
-// モーダルを閉じる
-if (modalClose) {
-    modalClose.addEventListener('click', function() {
-        loginModal.style.display = 'none';
-    });
-}
-
-// モーダル外クリックで閉じる
-if (loginModal) {
-    loginModal.addEventListener('click', function(e) {
-        if (e.target === loginModal) {
-            loginModal.style.display = 'none';
-        }
-    });
-}
-
-// ログインフォームの処理
-const loginForm = document.getElementById('login-form');
-if (loginForm) {
-    loginForm.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        
-        const email = document.getElementById('modal-email').value;
-        const password = document.getElementById('modal-password').value;
-        
-        try {
-            const response = await apiClient.login(email, password);
-            
-            // ログイン成功時の処理
-            localStorage.setItem('token', response.access_token);
-            localStorage.setItem('user', JSON.stringify(response.user));
-            
-            // ページをリロードして認証状態を更新
-            window.location.reload();
-            
-        } catch (error) {
-            console.error('ログインエラー:', error);
-            alert('ログインに失敗しました。メールアドレスとパスワードを確認してください。');
-        }
-    });
-}
 
 // バックエンドから動画データを取得
 async function loadVideosFromAPI(params = {}) {
@@ -134,11 +80,11 @@ function renderVideos(filteredVideos) {
     
     // 動画数を表示
     const videoCount = document.createElement('div');
-    videoCount.className = 'video-count';
-    videoCount.innerHTML = `
-        <i class="fas fa-video"></i>
-        <span>${filteredVideos.length}件の動画</span>
-    `;
+    // videoCount.className = 'video-count';
+    // videoCount.innerHTML = `
+    //     <i class="fas fa-video"></i>
+    //     <span>${filteredVideos.length}件の動画</span>
+    // `;
     videoList.appendChild(videoCount);
     
     // 動画グリッドコンテナ
@@ -175,67 +121,32 @@ function renderVideos(filteredVideos) {
     videoList.appendChild(videoGrid);
 }
 
-// カテゴリフィルターの処理
-const categoryButtons = document.querySelectorAll('.category-btn');
-categoryButtons.forEach(button => {
-    button.addEventListener('click', async function() {
-        // アクティブクラスを更新
-        categoryButtons.forEach(btn => btn.classList.remove('active'));
-        this.classList.add('active');
-        
-        const category = this.getAttribute('data-category');
-        await filterVideosByCategory(category);
-    });
-});
-
-// カテゴリでフィルタリング
-async function filterVideosByCategory(category) {
-    let filteredVideos;
-    
-    if (category === 'all') {
-        filteredVideos = await loadVideosFromAPI();
-    } else {
-        filteredVideos = await loadVideosFromAPI({ category: category });
-    }
-    
-    renderVideos(filteredVideos);
-}
-
 // 検索機能
 searchInput.addEventListener("input", async () => {
     const keyword = searchInput.value.toLowerCase();
-    const activeCategory = document.querySelector('.category-btn.active');
-    const category = activeCategory ? activeCategory.getAttribute('data-category') : 'all';
     
     if (keyword.length === 0) {
-        // 検索キーワードが空の場合はカテゴリフィルターのみ適用
-        await filterVideosByCategory(category);
+        // 検索キーワードが空の場合は全動画を表示
+        try {
+            const apiVideos = await loadVideosFromAPI();
+            if (apiVideos && apiVideos.length > 0) {
+                renderVideos(apiVideos);
+            } else {
+                renderVideos(videos);
+            }
+        } catch (error) {
+            renderVideos(videos);
+        }
         return;
     }
     
     try {
-        let filteredVideos;
-        
-        if (category === 'all') {
-            filteredVideos = await loadVideosFromAPI({ search: keyword });
-        } else {
-            // カテゴリと検索の組み合わせは、まずカテゴリで絞り込み、その後フロントエンドで検索
-            const categoryVideos = await loadVideosFromAPI({ category: category });
-            filteredVideos = categoryVideos.filter(video =>
-                video.title.toLowerCase().includes(keyword) ||
-                (video.description && video.description.toLowerCase().includes(keyword))
-            );
-        }
-        
+        const filteredVideos = await loadVideosFromAPI({ search: keyword });
         renderVideos(filteredVideos);
     } catch (error) {
         console.error('検索エラー:', error);
         // エラーの場合はローカル検索
-        let filtered = videos;
-        if (category !== 'all') {
-            filtered = filtered.filter(video => video.category === category);
-        }
-        filtered = filtered.filter(video =>
+        const filtered = videos.filter(video =>
             video.title.toLowerCase().includes(keyword) ||
             video.channel.toLowerCase().includes(keyword)
         );

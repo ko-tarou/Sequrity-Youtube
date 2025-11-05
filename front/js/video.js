@@ -390,6 +390,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     channelName.textContent = video.channel || 'Unknown Channel';
                     channelAvatar.src = video.channelicon || 'https://via.placeholder.com/40x40';
                     
+                    // ページタイトルを動画タイトルに更新
+                    document.title = `${video.title} - SecProTube`;
+                    
                     document.getElementById('video-views').innerHTML = `
                         <i class="fas fa-eye"></i> ${video.views || 0} 回視聴
                     `;

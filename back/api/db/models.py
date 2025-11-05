@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
 from sqlalchemy.sql import func
-from api.db.database import Base
+from db.database import Base
 
 
 class Notice(Base):
