@@ -16,16 +16,39 @@ def create_video(db: Session, video: VideoCreate):
 def get_videos(db: Session, skip: int = 0, limit: int = 100) -> List[Video]:
     return db.query(Video).offset(skip).limit(limit).all()
 
+def get_videos_with_count(db: Session, skip: int = 0, limit: int = 100):
+    """Return a page of videos and the total number of videos."""
+    query = db.query(Video)
+    total = query.count()
+    videos = query.offset(skip).limit(limit).all()
+    return videos, total
+
 def get_video_by_id(db: Session, video_id: int) -> Optional[Video]:
     return db.query(Video).filter(Video.video_id == video_id).first()
 
 def get_videos_by_category(db: Session, category: str, skip: int = 0, limit: int = 100) -> List[Video]:
     return db.query(Video).filter(Video.category == category).offset(skip).limit(limit).all()
 
+def get_videos_by_category_with_count(db: Session, category: str, skip: int = 0, limit: int = 100):
+    """Return a page of videos for a category and the total matching count."""
+    query = db.query(Video).filter(Video.category == category)
+    total = query.count()
+    videos = query.offset(skip).limit(limit).all()
+    return videos, total
+
 def search_videos(db: Session, keyword: str, skip: int = 0, limit: int = 100) -> List[Video]:
     return db.query(Video).filter(
         Video.title.contains(keyword) | Video.description.contains(keyword)
     ).offset(skip).limit(limit).all()
+
+def search_videos_with_count(db: Session, keyword: str, skip: int = 0, limit: int = 100):
+    """Return a page of videos matching keyword and the total matching count."""
+    query = db.query(Video).filter(
+        Video.title.contains(keyword) | Video.description.contains(keyword)
+    )
+    total = query.count()
+    videos = query.offset(skip).limit(limit).all()
+    return videos, total
 
 def update_video_views(db: Session, video_id: int):
     video = db.query(Video).filter(Video.video_id == video_id).first()

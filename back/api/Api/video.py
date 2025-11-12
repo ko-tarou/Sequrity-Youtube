@@ -20,13 +20,13 @@ def get_videos_api(
     db: Session = Depends(get_db)
 ):
     if category:
-        videos = crud_video.get_videos_by_category(db, category, skip, limit)
+        videos, total = crud_video.get_videos_by_category_with_count(db, category, skip, limit)
     elif search:
-        videos = crud_video.search_videos(db, search, skip, limit)
+        videos, total = crud_video.search_videos_with_count(db, search, skip, limit)
     else:
-        videos = crud_video.get_videos(db, skip, limit)
-    
-    return VideoListResponse(videos=videos, total=len(videos))
+        videos, total = crud_video.get_videos_with_count(db, skip, limit)
+
+    return VideoListResponse(videos=videos, total=total)
 
 @router.get("/{video_id}", response_model=VideoResponse)
 def get_video_api(video_id: int, db: Session = Depends(get_db)):
