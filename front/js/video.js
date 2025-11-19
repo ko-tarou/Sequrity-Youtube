@@ -400,6 +400,34 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('like-count').textContent = video.likes || 0;
                     document.getElementById('dislike-count').textContent = video.dislikes || 0;
                     
+                    // 視聴回数を更新（一定時間視聴した場合のみ）
+                    // 5秒以上視聴した場合に視聴回数を更新
+                    let viewCounted = false;
+                    let viewStartTime = null;
+                    
+                    if (videoPlayer) {
+                        videoPlayer.addEventListener('play', function() {
+                            viewStartTime = Date.now();
+                        });
+                        
+                        videoPlayer.addEventListener('timeupdate', function() {
+                            // 5秒以上視聴した場合に視聴回数を更新（1回のみ）
+                            if (!viewCounted && viewStartTime && (Date.now() - viewStartTime) >= 5000) {
+                                viewCounted = true;
+                                apiClient.updateVideoView(videoId).catch(err => {
+                                    console.warn('視聴回数の更新に失敗:', err);
+                                });
+                            }
+                        });
+                    } else {
+                        // YouTube動画の場合は、ページ読み込みから5秒後に視聴回数を更新
+                        setTimeout(() => {
+                            apiClient.updateVideoView(videoId).catch(err => {
+                                console.warn('視聴回数の更新に失敗:', err);
+                            });
+                        }, 5000);
+                    }
+                    
                     console.log('動画情報を読み込みました:', video);
                     console.log('動画URL:', video.url);
                 } else {
