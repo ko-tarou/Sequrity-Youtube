@@ -1,21 +1,41 @@
-<!-- front/video.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecProVVS</title>
+    <title>動画視聴 - SecProTube</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/video.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
-
+    <!-- Header -->
     <header class="header">
         <div class="nav-container">
             <a href="index.html" class="logo">
-                <i class="fas fa-play-circle"></i> SecProVVS
+                <i class="fas fa-play-circle"></i> SecProTube
             </a>
+            <nav class="nav-links">
+                <a href="index.html">
+                    <i class="fas fa-home"></i> ホーム
+                </a>
+                <a href="upload.html" id="upload-link" style="display: none;">
+                    <i class="fas fa-upload"></i> アップロード
+                </a>
+                <a href="profile.html" id="profile-link" style="display: none;">
+                    <i class="fas fa-user"></i> プロフィール
+                </a>
+                <a href="channel-create.html" id="channel-link" style="display: none;">
+                    <i class="fas fa-plus"></i> チャンネル作成
+                </a>
+            </nav>
+            <div class="auth-buttons">
+                <button id="login-btn" class="btn-primary">
+                    <i class="fas fa-sign-in-alt"></i> ログイン
+                </button>
+                <button id="logout-btn" class="btn-logout" style="display: none;">
+                    <i class="fas fa-sign-out-alt"></i> ログアウト
+                </button>
+            </div>
         </div>
     </header>
 

@@ -1,12 +1,10 @@
-<!-- front/upload.html -->
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SecProVVS</title>
+    <title>動画アップロード - SecProTube</title>
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/upload.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
@@ -14,7 +12,7 @@
     <header class="header">
         <div class="nav-container">
             <a href="index.html" class="logo">
-                <i class="fas fa-play-circle"></i> SecProVVS
+                <i class="fas fa-play-circle"></i> SecProTube
             </a>
             <nav class="nav-links">
                 <a href="index.html">
@@ -77,7 +75,7 @@
                     <div class="details-section">
                         <div class="form-group">
                             <label for="video-title">
-                                 タイトル
+                                <i class="fas fa-heading"></i> タイトル
                             </label>
                             <input type="text" id="video-title" name="video-title" class="form-input" 
                                    placeholder="動画のタイトルを入力してください" required>
@@ -85,7 +83,7 @@
 
                         <div class="form-group">
                             <label for="video-description">
-                                 説明
+                                <i class="fas fa-align-left"></i> 説明
                             </label>
                             <textarea id="video-description" name="video-description" class="form-input" 
                                       placeholder="動画の説明を入力してください" rows="4"></textarea>
@@ -93,7 +91,7 @@
 
                         <div class="form-group">
                             <label for="video-category">
-                                 カテゴリ
+                                <i class="fas fa-tags"></i> カテゴリ
                             </label>
                             <select id="video-category" name="video-category" class="form-input">
                                 <option value="">カテゴリを選択</option>
@@ -110,7 +108,7 @@
 
                         <div class="form-group">
                             <label for="video-thumbnail">
-                                 サムネイル
+                                <i class="fas fa-image"></i> サムネイル
                             </label>
                             <div class="thumbnail-upload-area" id="thumbnail-upload-area">
                                 <div class="upload-placeholder">
@@ -130,18 +128,18 @@
 
                         <div class="form-group">
                             <label for="video-visibility">
-                                 公開設定
+                                <i class="fas fa-eye"></i> 公開設定
                             </label>
                             <select id="video-visibility" name="video-visibility" class="form-input">
-                                <option value="public"><i class="fas fa-eye"></i>公開</option>
-                                <option value="unlisted"><i class="fas fa-eye-slash"></i>限定公開</option>
-                                <option value="private"><i class="fas fa-lock"></i>非公開</option>
+                                <option value="public">公開</option>
+                                <option value="unlisted">限定公開</option>
+                                <option value="private">非公開</option>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="video-tags">
-                                <i class="fas fa-tags"></i> タグ
+                                <i class="fas fa-tags"></i> タグ（カンマ区切り）
                             </label>
                             <input type="text" id="video-tags" name="video-tags" class="form-input" 
                                    placeholder="例: プログラミング, JavaScript, チュートリアル">
