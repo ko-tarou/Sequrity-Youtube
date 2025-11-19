@@ -1,6 +1,7 @@
 from fastapi import FastAPI
-from . import notice, user, channel, video, category, comment, channel_subscription
-from db.database import Base, engine
+from . import notice, user, channel, video, category, comment, channel_subscription, auth
+from ..db.database import Base, engine
+
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
@@ -15,6 +16,8 @@ origins = [
     "http://127.0.0.1:3000",
     "http://localhost:8000",
     "http://127.0.0.1:8000",
+    "http://localhost:8001",
+    "http://127.0.0.1:8001",
 ]
 app.add_middleware(
     CORSMiddleware,
@@ -24,6 +27,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+app.include_router(auth.router)
 app.include_router(notice.router)
 app.include_router(user.router)
 app.include_router(channel.router)
