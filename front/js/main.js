@@ -95,26 +95,71 @@ function renderVideos(filteredVideos) {
         const card = document.createElement("div");
         card.className = "video-card";
 
-        card.innerHTML = `
-            <a href="video.html?id=${video.video_id || video.id}">
-                <div class="video-thumbnail-container">
-                    <img src="${video.thumbnail || 'https://via.placeholder.com/300x180'}" alt="${video.title}" class="video-thumbnail">
-                    <div class="video-duration">${video.duration || '0:00'}</div>
-                </div>
-                <div class="video-details">
-                    <img src="${video.channelicon || 'https://via.placeholder.com/40x40'}" alt="${video.channel || 'Unknown'}" class="channel-icon">
-                    <div class="text-info">
-                        <h3 class="video-title">${video.title}</h3>
-                        <p class="channel">${video.channel || 'Unknown Channel'}</p>
-                        <p class="video-stats">
-                            <span class="views">${video.views || 0}回視聴</span>
-                            <span class="upload-date">${video.upload_date || video.uploadDate || '最近'}</span>
-                        </p>
-                    </div>
-                </div>
-            </a>
-        `;
+        // リンク要素を作成
+        const link = document.createElement("a");
+        link.href = `video.html?id=${video.video_id || video.id}`;
 
+        // サムネイルコンテナ
+        const thumbnailContainer = document.createElement("div");
+        thumbnailContainer.className = "video-thumbnail-container";
+        
+        const thumbnailImg = document.createElement("img");
+        thumbnailImg.src = video.thumbnail || 'https://via.placeholder.com/300x180';
+        thumbnailImg.alt = video.title || '';
+        thumbnailImg.className = "video-thumbnail";
+        
+        const duration = document.createElement("div");
+        duration.className = "video-duration";
+        duration.textContent = video.duration || '0:00';
+        
+        thumbnailContainer.appendChild(thumbnailImg);
+        thumbnailContainer.appendChild(duration);
+
+        // 動画詳細
+        const details = document.createElement("div");
+        details.className = "video-details";
+        
+        const channelIcon = document.createElement("img");
+        channelIcon.src = video.channelicon || 'https://via.placeholder.com/40x40';
+        channelIcon.alt = video.channel || 'Unknown';
+        channelIcon.className = "channel-icon";
+        
+        const textInfo = document.createElement("div");
+        textInfo.className = "text-info";
+        
+        const title = document.createElement("h3");
+        title.className = "video-title";
+        title.textContent = video.title || '';
+        
+        const channel = document.createElement("p");
+        channel.className = "channel";
+        channel.textContent = video.channel || 'Unknown Channel';
+        
+        const stats = document.createElement("p");
+        stats.className = "video-stats";
+        
+        const views = document.createElement("span");
+        views.className = "views";
+        views.textContent = `${video.views || 0}回視聴`;
+        
+        const uploadDate = document.createElement("span");
+        uploadDate.className = "upload-date";
+        uploadDate.textContent = video.upload_date || video.uploadDate || '最近';
+        
+        stats.appendChild(views);
+        stats.appendChild(uploadDate);
+        
+        textInfo.appendChild(title);
+        textInfo.appendChild(channel);
+        textInfo.appendChild(stats);
+        
+        details.appendChild(channelIcon);
+        details.appendChild(textInfo);
+        
+        link.appendChild(thumbnailContainer);
+        link.appendChild(details);
+        
+        card.appendChild(link);
         videoGrid.appendChild(card);
     });
     
