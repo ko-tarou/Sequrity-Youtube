@@ -41,7 +41,7 @@ def search_videos(db: Session, keyword: str, skip: int = 0, limit: int = 100) ->
         Video.title.contains(keyword) | Video.description.contains(keyword)
     ).offset(skip).limit(limit).all()
 
-def search_videos_with_count(db: Session, keyword: str, skip: int = 0, limit: int = 100):
+def search_videos_with_count(db: Session, keyword: str, skip: int = 0, limit: int = 100) -> Tuple[List[Video], int]:
     """Return a page of videos matching keyword and the total matching count."""
     query = db.query(Video).filter(
         Video.title.contains(keyword) | Video.description.contains(keyword)
