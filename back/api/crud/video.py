@@ -29,7 +29,7 @@ def get_video_by_id(db: Session, video_id: int) -> Optional[Video]:
 def get_videos_by_category(db: Session, category: str, skip: int = 0, limit: int = 100) -> List[Video]:
     return db.query(Video).filter(Video.category == category).offset(skip).limit(limit).all()
 
-def get_videos_by_category_with_count(db: Session, category: str, skip: int = 0, limit: int = 100):
+def get_videos_by_category_with_count(db: Session, category: str, skip: int = 0, limit: int = 100) -> Tuple[List[Video], int]:
     """Return a page of videos for a category and the total matching count."""
     query = db.query(Video).filter(Video.category == category)
     total = query.count()
