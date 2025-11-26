@@ -16,7 +16,7 @@ def create_video(db: Session, video: VideoCreate):
 def get_videos(db: Session, skip: int = 0, limit: int = 100) -> List[Video]:
     return db.query(Video).offset(skip).limit(limit).all()
 
-def get_videos_with_count(db: Session, skip: int = 0, limit: int = 100):
+def get_videos_with_count(db: Session, skip: int = 0, limit: int = 100) -> Tuple[List[Video], int]:
     """Return a page of videos and the total number of videos."""
     query = db.query(Video)
     total = query.count()
