@@ -38,17 +38,6 @@ function getSafeImageUrl(url, defaultUrl = 'https://via.placeholder.com/300x180'
     return defaultUrl;
 }
 
-// 安全なoption要素を作成（XSS対策: option要素内にHTMLタグを含めない）
-function createSafeOption(value, text, selected = false) {
-    const option = document.createElement('option');
-    option.value = value;
-    option.textContent = text; // textContentを使用してHTMLタグを無効化
-    if (selected) {
-        option.selected = true;
-    }
-    return option;
-}
-
 // 認証状態の管理
 function checkAuthStatus() {
     const token = localStorage.getItem('token');
@@ -74,8 +63,8 @@ function checkAuthStatus() {
         // ゲストモード（ログインなしでも動画閲覧可能）
         if (loginBtn) loginBtn.style.display = 'block';
         if (logoutBtn) logoutBtn.style.display = 'none';
-        if (profileLink) profileLink.style.display = 'block';
-        if (uploadLink) uploadLink.style.display = 'block';
+        if (profileLink) profileLink.style.display = 'none';
+        if (uploadLink) uploadLink.style.display = 'none';
         if (channelLink) channelLink.style.display = 'none';
         if (channelCreateSection) channelCreateSection.style.display = 'none';
     }
