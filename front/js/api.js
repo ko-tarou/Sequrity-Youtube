@@ -153,6 +153,23 @@ class ApiClient {
         return await response.json();
     }
 
+    // 視聴回数を更新（DoS攻撃対策あり）
+    async updateVideoView(videoId) {
+        const response = await fetch(`${this.baseUrl}/videos/${videoId}/view`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        
+        // 204 No Content または 429 Too Many Requests は正常なレスポンス
+        if (!response.ok && response.status !== 429) {
+            console.warn('視聴回数の更新に失敗しました（レート制限の可能性があります）');
+        }
+        
+        return response.ok;
+    }
+
     // コメント投稿
     async postComment(commentData) {
         const response = await fetch(`${this.baseUrl}/comments/`, {
