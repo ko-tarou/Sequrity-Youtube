@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from . import notice, user, channel, video, category, comment, channel_subscription, auth
 from ..db.database import Base, engine
-
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()

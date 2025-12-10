@@ -9,6 +9,35 @@ const channelCreateSection = document.getElementById("channel-create-section");
 const loginModal = document.getElementById("login-modal");
 const modalClose = document.getElementById("modal-close");
 
+// URL検証関数（XSS対策）
+function isValidImageUrl(url) {
+    if (!url || typeof url !== 'string') {
+        return false;
+    }
+    
+    // 相対パスの場合は安全
+    if (url.startsWith('/') || url.startsWith('./') || !url.includes(':')) {
+        return true;
+    }
+    
+    try {
+        const urlObj = new URL(url);
+        // http: または https: プロトコルのみ許可
+        return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
+    } catch (e) {
+        // URL解析に失敗した場合は相対パスとして扱う
+        return !url.includes(':');
+    }
+}
+
+// 安全な画像URLを取得（無効な場合はデフォルトURLを返す）
+function getSafeImageUrl(url, defaultUrl = 'https://via.placeholder.com/300x180') {
+    if (isValidImageUrl(url)) {
+        return url;
+    }
+    return defaultUrl;
+}
+
 // 認証状態の管理
 function checkAuthStatus() {
     const token = localStorage.getItem('token');
@@ -164,7 +193,7 @@ function renderVideos(filteredVideos) {
         thumbnailContainer.className = "video-thumbnail-container";
         
         const thumbnailImg = document.createElement("img");
-        thumbnailImg.src = video.thumbnail || 'https://via.placeholder.com/300x180';
+        thumbnailImg.src = getSafeImageUrl(video.thumbnail, 'https://via.placeholder.com/300x180');
         thumbnailImg.alt = video.title || '';
         thumbnailImg.className = "video-thumbnail";
         
@@ -180,7 +209,7 @@ function renderVideos(filteredVideos) {
         details.className = "video-details";
         
         const channelIcon = document.createElement("img");
-        channelIcon.src = video.channelicon || 'https://via.placeholder.com/40x40';
+        channelIcon.src = getSafeImageUrl(video.channelicon, 'https://via.placeholder.com/40x40');
         channelIcon.alt = video.channel || 'Unknown';
         channelIcon.className = "channel-icon";
         
