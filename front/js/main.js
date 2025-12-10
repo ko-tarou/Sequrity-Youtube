@@ -17,42 +17,46 @@ function checkAuthStatus() {
     
     if (token && user) {
         // ログイン済み
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'block';
-        profileLink.style.display = 'block';
-        uploadLink.style.display = 'block';
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'block';
+        if (profileLink) profileLink.style.display = 'block';
+        if (uploadLink) uploadLink.style.display = 'block';
         
         // チャンネル未作成の場合、チャンネル作成セクションを表示
         if (!channel) {
-            channelLink.style.display = 'block';
-            channelCreateSection.style.display = 'block';
+            if (channelLink) channelLink.style.display = 'block';
+            if (channelCreateSection) channelCreateSection.style.display = 'block';
         } else {
-            channelLink.style.display = 'none';
-            channelCreateSection.style.display = 'none';
+            if (channelLink) channelLink.style.display = 'none';
+            if (channelCreateSection) channelCreateSection.style.display = 'none';
         }
     } else {
         // ゲストモード（ログインなしでも動画閲覧可能）
-        loginBtn.style.display = 'block';
-        logoutBtn.style.display = 'none';
-        profileLink.style.display = 'none';
-        uploadLink.style.display = 'none';
-        channelLink.style.display = 'none';
-        channelCreateSection.style.display = 'none';
+        if (loginBtn) loginBtn.style.display = 'block';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (profileLink) profileLink.style.display = 'none';
+        if (uploadLink) uploadLink.style.display = 'none';
+        if (channelLink) channelLink.style.display = 'none';
+        if (channelCreateSection) channelCreateSection.style.display = 'none';
     }
 }
 
 // ログインボタンの処理
-loginBtn.addEventListener('click', function() {
-    showLoginModal();
-});
+if (loginBtn) {
+    loginBtn.addEventListener('click', function() {
+        showLoginModal();
+    });
+}
 
 // ログアウトボタンの処理
-logoutBtn.addEventListener('click', function() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('channel');
-    window.location.href = 'index.html';
-});
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('channel');
+        window.location.href = 'index.html';
+    });
+}
 
 // ログインモーダルの表示
 function showLoginModal() {
@@ -119,6 +123,8 @@ async function loadVideosFromAPI(params = {}) {
 }
 
 function renderVideos(filteredVideos) {
+    if (!videoList) return;
+    
     videoList.innerHTML = "";
     
     if (filteredVideos.length === 0) {
@@ -247,49 +253,53 @@ async function filterVideosByCategory(category) {
 }
 
 // 検索機能
-searchInput.addEventListener("input", async () => {
-    const keyword = searchInput.value.toLowerCase();
-    const activeCategory = document.querySelector('.category-btn.active');
-    const category = activeCategory ? activeCategory.getAttribute('data-category') : 'all';
-    
-    if (keyword.length === 0) {
-        // 検索キーワードが空の場合はカテゴリフィルターのみ適用
-        await filterVideosByCategory(category);
-        return;
-    }
-    
-    try {
-        let filteredVideos;
+if (searchInput) {
+    searchInput.addEventListener("input", async () => {
+        const keyword = searchInput.value.toLowerCase();
+        const activeCategory = document.querySelector('.category-btn.active');
+        const category = activeCategory ? activeCategory.getAttribute('data-category') : 'all';
         
-        if (category === 'all') {
-            filteredVideos = await loadVideosFromAPI({ search: keyword });
-        } else {
-            // カテゴリと検索の組み合わせは、まずカテゴリで絞り込み、その後フロントエンドで検索
-            const categoryVideos = await loadVideosFromAPI({ category: category });
-            filteredVideos = categoryVideos.filter(video =>
+        if (keyword.length === 0) {
+            // 検索キーワードが空の場合はカテゴリフィルターのみ適用
+            await filterVideosByCategory(category);
+            return;
+        }
+        
+        try {
+            let filteredVideos;
+            
+            if (category === 'all') {
+                filteredVideos = await loadVideosFromAPI({ search: keyword });
+            } else {
+                // カテゴリと検索の組み合わせは、まずカテゴリで絞り込み、その後フロントエンドで検索
+                const categoryVideos = await loadVideosFromAPI({ category: category });
+                filteredVideos = categoryVideos.filter(video =>
+                    video.title.toLowerCase().includes(keyword) ||
+                    (video.description && video.description.toLowerCase().includes(keyword))
+                );
+            }
+            
+            renderVideos(filteredVideos);
+        } catch (error) {
+            console.error('検索エラー:', error);
+            // エラーの場合はローカル検索
+            let filtered = videos;
+            if (category !== 'all') {
+                filtered = filtered.filter(video => video.category === category);
+            }
+            filtered = filtered.filter(video =>
                 video.title.toLowerCase().includes(keyword) ||
-                (video.description && video.description.toLowerCase().includes(keyword))
+                video.channel.toLowerCase().includes(keyword)
             );
+            renderVideos(filtered);
         }
-        
-        renderVideos(filteredVideos);
-    } catch (error) {
-        console.error('検索エラー:', error);
-        // エラーの場合はローカル検索
-        let filtered = videos;
-        if (category !== 'all') {
-            filtered = filtered.filter(video => video.category === category);
-        }
-        filtered = filtered.filter(video =>
-            video.title.toLowerCase().includes(keyword) ||
-            video.channel.toLowerCase().includes(keyword)
-        );
-        renderVideos(filtered);
-    }
-});
+    });
+}
 
 // 初期表示
 async function initializeVideos() {
+    if (!videoList) return;
+    
     try {
         console.log('初期動画読み込み開始');
         console.log('ローカル動画データ:', videos);
@@ -310,5 +320,8 @@ async function initializeVideos() {
     }
 }
 
-initializeVideos();
+// 初期化処理（要素が存在する場合のみ実行）
+if (videoList) {
+    initializeVideos();
+}
 checkAuthStatus();
