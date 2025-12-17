@@ -9,6 +9,35 @@ const channelCreateSection = document.getElementById("channel-create-section");
 const loginModal = document.getElementById("login-modal");
 const modalClose = document.getElementById("modal-close");
 
+// URL検証関数（XSS対策）
+function isValidImageUrl(url) {
+    if (!url || typeof url !== 'string') {
+        return false;
+    }
+    
+    // 相対パスの場合は安全
+    if (url.startsWith('/') || url.startsWith('./') || !url.includes(':')) {
+        return true;
+    }
+    
+    try {
+        const urlObj = new URL(url);
+        // http: または https: プロトコルのみ許可
+        return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
+    } catch (e) {
+        // URL解析に失敗した場合は相対パスとして扱う
+        return !url.includes(':');
+    }
+}
+
+// 安全な画像URLを取得（無効な場合はデフォルトURLを返す）
+function getSafeImageUrl(url, defaultUrl = 'https://via.placeholder.com/300x180') {
+    if (isValidImageUrl(url)) {
+        return url;
+    }
+    return defaultUrl;
+}
+
 // 認証状態の管理
 function checkAuthStatus() {
     const token = localStorage.getItem('token');
@@ -17,42 +46,46 @@ function checkAuthStatus() {
     
     if (token && user) {
         // ログイン済み
-        loginBtn.style.display = 'none';
-        logoutBtn.style.display = 'block';
-        profileLink.style.display = 'block';
-        uploadLink.style.display = 'block';
+        if (loginBtn) loginBtn.style.display = 'none';
+        if (logoutBtn) logoutBtn.style.display = 'block';
+        if (profileLink) profileLink.style.display = 'block';
+        if (uploadLink) uploadLink.style.display = 'block';
         
         // チャンネル未作成の場合、チャンネル作成セクションを表示
         if (!channel) {
-            channelLink.style.display = 'block';
-            channelCreateSection.style.display = 'block';
+            if (channelLink) channelLink.style.display = 'block';
+            if (channelCreateSection) channelCreateSection.style.display = 'block';
         } else {
-            channelLink.style.display = 'none';
-            channelCreateSection.style.display = 'none';
+            if (channelLink) channelLink.style.display = 'none';
+            if (channelCreateSection) channelCreateSection.style.display = 'none';
         }
     } else {
         // ゲストモード（ログインなしでも動画閲覧可能）
-        loginBtn.style.display = 'block';
-        logoutBtn.style.display = 'none';
-        profileLink.style.display = 'none';
-        uploadLink.style.display = 'none';
-        channelLink.style.display = 'none';
-        channelCreateSection.style.display = 'none';
+        if (loginBtn) loginBtn.style.display = 'block';
+        if (logoutBtn) logoutBtn.style.display = 'none';
+        if (profileLink) profileLink.style.display = 'none';
+        if (uploadLink) uploadLink.style.display = 'none';
+        if (channelLink) channelLink.style.display = 'none';
+        if (channelCreateSection) channelCreateSection.style.display = 'none';
     }
 }
 
 // ログインボタンの処理
-loginBtn.addEventListener('click', function() {
-    showLoginModal();
-});
+if (loginBtn) {
+    loginBtn.addEventListener('click', function() {
+        showLoginModal();
+    });
+}
 
 // ログアウトボタンの処理
-logoutBtn.addEventListener('click', function() {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('channel');
-    window.location.href = 'index.html';
-});
+if (logoutBtn) {
+    logoutBtn.addEventListener('click', function() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        localStorage.removeItem('channel');
+        window.location.href = 'index.html';
+    });
+}
 
 // ログインモーダルの表示
 function showLoginModal() {
@@ -119,6 +152,8 @@ async function loadVideosFromAPI(params = {}) {
 }
 
 function renderVideos(filteredVideos) {
+    if (!videoList) return;
+    
     videoList.innerHTML = "";
     
     if (filteredVideos.length === 0) {
@@ -149,26 +184,71 @@ function renderVideos(filteredVideos) {
         const card = document.createElement("div");
         card.className = "video-card";
 
-        card.innerHTML = `
-            <a href="video.html?id=${video.video_id || video.id}">
-                <div class="video-thumbnail-container">
-                    <img src="${video.thumbnail || 'https://via.placeholder.com/300x180'}" alt="${video.title}" class="video-thumbnail">
-                    <div class="video-duration">${video.duration || '0:00'}</div>
-                </div>
-                <div class="video-details">
-                    <img src="${video.channelicon || 'https://via.placeholder.com/40x40'}" alt="${video.channel || 'Unknown'}" class="channel-icon">
-                    <div class="text-info">
-                        <h3 class="video-title">${video.title}</h3>
-                        <p class="channel">${video.channel || 'Unknown Channel'}</p>
-                        <p class="video-stats">
-                            <span class="views">${video.views || 0}回視聴</span>
-                            <span class="upload-date">${video.upload_date || video.uploadDate || '最近'}</span>
-                        </p>
-                    </div>
-                </div>
-            </a>
-        `;
+        // リンク要素を作成
+        const link = document.createElement("a");
+        link.href = `video.html?id=${video.video_id || video.id}`;
 
+        // サムネイルコンテナ
+        const thumbnailContainer = document.createElement("div");
+        thumbnailContainer.className = "video-thumbnail-container";
+        
+        const thumbnailImg = document.createElement("img");
+        thumbnailImg.src = getSafeImageUrl(video.thumbnail, 'https://via.placeholder.com/300x180');
+        thumbnailImg.alt = video.title || '';
+        thumbnailImg.className = "video-thumbnail";
+        
+        const duration = document.createElement("div");
+        duration.className = "video-duration";
+        duration.textContent = video.duration || '0:00';
+        
+        thumbnailContainer.appendChild(thumbnailImg);
+        thumbnailContainer.appendChild(duration);
+
+        // 動画詳細
+        const details = document.createElement("div");
+        details.className = "video-details";
+        
+        const channelIcon = document.createElement("img");
+        channelIcon.src = getSafeImageUrl(video.channelicon, 'https://via.placeholder.com/40x40');
+        channelIcon.alt = video.channel || 'Unknown';
+        channelIcon.className = "channel-icon";
+        
+        const textInfo = document.createElement("div");
+        textInfo.className = "text-info";
+        
+        const title = document.createElement("h3");
+        title.className = "video-title";
+        title.textContent = video.title || '';
+        
+        const channel = document.createElement("p");
+        channel.className = "channel";
+        channel.textContent = video.channel || 'Unknown Channel';
+        
+        const stats = document.createElement("p");
+        stats.className = "video-stats";
+        
+        const views = document.createElement("span");
+        views.className = "views";
+        views.textContent = `${video.views || 0}回視聴`;
+        
+        const uploadDate = document.createElement("span");
+        uploadDate.className = "upload-date";
+        uploadDate.textContent = video.upload_date || video.uploadDate || '最近';
+        
+        stats.appendChild(views);
+        stats.appendChild(uploadDate);
+        
+        textInfo.appendChild(title);
+        textInfo.appendChild(channel);
+        textInfo.appendChild(stats);
+        
+        details.appendChild(channelIcon);
+        details.appendChild(textInfo);
+        
+        link.appendChild(thumbnailContainer);
+        link.appendChild(details);
+        
+        card.appendChild(link);
         videoGrid.appendChild(card);
     });
     
@@ -202,49 +282,53 @@ async function filterVideosByCategory(category) {
 }
 
 // 検索機能
-searchInput.addEventListener("input", async () => {
-    const keyword = searchInput.value.toLowerCase();
-    const activeCategory = document.querySelector('.category-btn.active');
-    const category = activeCategory ? activeCategory.getAttribute('data-category') : 'all';
-    
-    if (keyword.length === 0) {
-        // 検索キーワードが空の場合はカテゴリフィルターのみ適用
-        await filterVideosByCategory(category);
-        return;
-    }
-    
-    try {
-        let filteredVideos;
+if (searchInput) {
+    searchInput.addEventListener("input", async () => {
+        const keyword = searchInput.value.toLowerCase();
+        const activeCategory = document.querySelector('.category-btn.active');
+        const category = activeCategory ? activeCategory.getAttribute('data-category') : 'all';
         
-        if (category === 'all') {
-            filteredVideos = await loadVideosFromAPI({ search: keyword });
-        } else {
-            // カテゴリと検索の組み合わせは、まずカテゴリで絞り込み、その後フロントエンドで検索
-            const categoryVideos = await loadVideosFromAPI({ category: category });
-            filteredVideos = categoryVideos.filter(video =>
+        if (keyword.length === 0) {
+            // 検索キーワードが空の場合はカテゴリフィルターのみ適用
+            await filterVideosByCategory(category);
+            return;
+        }
+        
+        try {
+            let filteredVideos;
+            
+            if (category === 'all') {
+                filteredVideos = await loadVideosFromAPI({ search: keyword });
+            } else {
+                // カテゴリと検索の組み合わせは、まずカテゴリで絞り込み、その後フロントエンドで検索
+                const categoryVideos = await loadVideosFromAPI({ category: category });
+                filteredVideos = categoryVideos.filter(video =>
+                    video.title.toLowerCase().includes(keyword) ||
+                    (video.description && video.description.toLowerCase().includes(keyword))
+                );
+            }
+            
+            renderVideos(filteredVideos);
+        } catch (error) {
+            console.error('検索エラー:', error);
+            // エラーの場合はローカル検索
+            let filtered = videos;
+            if (category !== 'all') {
+                filtered = filtered.filter(video => video.category === category);
+            }
+            filtered = filtered.filter(video =>
                 video.title.toLowerCase().includes(keyword) ||
-                (video.description && video.description.toLowerCase().includes(keyword))
+                video.channel.toLowerCase().includes(keyword)
             );
+            renderVideos(filtered);
         }
-        
-        renderVideos(filteredVideos);
-    } catch (error) {
-        console.error('検索エラー:', error);
-        // エラーの場合はローカル検索
-        let filtered = videos;
-        if (category !== 'all') {
-            filtered = filtered.filter(video => video.category === category);
-        }
-        filtered = filtered.filter(video =>
-            video.title.toLowerCase().includes(keyword) ||
-            video.channel.toLowerCase().includes(keyword)
-        );
-        renderVideos(filtered);
-    }
-});
+    });
+}
 
 // 初期表示
 async function initializeVideos() {
+    if (!videoList) return;
+    
     try {
         console.log('初期動画読み込み開始');
         console.log('ローカル動画データ:', videos);
@@ -265,5 +349,8 @@ async function initializeVideos() {
     }
 }
 
-initializeVideos();
+// 初期化処理（要素が存在する場合のみ実行）
+if (videoList) {
+    initializeVideos();
+}
 checkAuthStatus();
