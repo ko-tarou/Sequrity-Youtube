@@ -76,9 +76,6 @@ class ApiClient {
 
         const response = await fetch(`${this.baseUrl}/channels/`, {
             method: 'POST',
-            headers: {
-                'Authorization': this.getAuthHeaders().Authorization
-            },
             credentials: 'include',  // Cookieを送信するために必要
             body: formData
         });
@@ -106,9 +103,6 @@ class ApiClient {
 
         const response = await fetch(`${this.baseUrl}/videos/`, {
             method: 'POST',
-            headers: {
-                'Authorization': this.getAuthHeaders().Authorization
-            },
             credentials: 'include',  // Cookieを送信するために必要
             body: formData
         });

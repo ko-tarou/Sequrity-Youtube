@@ -8,6 +8,7 @@ from ..db.database import get_db
 from ..db.models import User
 from ..crud import auth as crud_auth, user as crud_user
 from ..schemas.user import UserCreate
+import os
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -89,7 +90,7 @@ def login(
         value=access_token,
         max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         httponly=True,
-        secure=False,
+        secure=os.environ.get("ENVIRONMENT") == "production",
         samesite="lax",
         path="/"
     )
@@ -140,7 +141,7 @@ def register(
         value=access_token,
         max_age=ACCESS_TOKEN_EXPIRE_MINUTES * 60,
         httponly=True,
-        secure=False,
+        secure=os.environ.get("ENVIRONMENT") == "production",
         samesite="lax",
         path="/"                  
     )
@@ -162,7 +163,7 @@ def logout(response: Response):
     response.delete_cookie(
         key=COOKIE_NAME,
         httponly=True,
-        secure=False,  # 開発環境ではFalse、本番環境ではTrue
+        secure=os.environ.get("ENVIRONMENT") == "production",  # 開発環境ではFalse、本番環境ではTrue
         samesite="lax",
         path="/"
     )
