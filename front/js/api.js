@@ -4,12 +4,11 @@ class ApiClient {
         this.baseUrl = 'http://localhost:8001'; // FastAPIのポート8001
     }
 
-    // 認証ヘッダーを取得
+    // 認証ヘッダーを取得（HttpOnly Cookie使用のため不要だが、後方互換性のため残す）
     getAuthHeaders() {
-        const token = localStorage.getItem('token');
+        // HttpOnly Cookieは自動的に送信されるため、Authorizationヘッダーは不要
         return {
-            'Content-Type': 'application/json',
-            'Authorization': token ? `Bearer ${token}` : ''
+            'Content-Type': 'application/json'
         };
     }
 
@@ -20,6 +19,7 @@ class ApiClient {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include',  // Cookieを送信するために必要
             body: JSON.stringify({ email, password })
         });
         
@@ -37,6 +37,7 @@ class ApiClient {
             headers: {
                 'Content-Type': 'application/json'
             },
+            credentials: 'include',  // Cookieを送信するために必要
             body: JSON.stringify({ username, email, password })
         });
         
@@ -50,7 +51,8 @@ class ApiClient {
     // ユーザー情報取得
     async getCurrentUser() {
         const response = await fetch(`${this.baseUrl}/auth/me`, {
-            headers: this.getAuthHeaders()
+            headers: this.getAuthHeaders(),
+            credentials: 'include'  // Cookieを送信するために必要
         });
         
         if (!response.ok) {
@@ -74,9 +76,7 @@ class ApiClient {
 
         const response = await fetch(`${this.baseUrl}/channels/`, {
             method: 'POST',
-            headers: {
-                'Authorization': this.getAuthHeaders().Authorization
-            },
+            credentials: 'include',  // Cookieを送信するために必要
             body: formData
         });
         
@@ -103,9 +103,7 @@ class ApiClient {
 
         const response = await fetch(`${this.baseUrl}/videos/`, {
             method: 'POST',
-            headers: {
-                'Authorization': this.getAuthHeaders().Authorization
-            },
+            credentials: 'include',  // Cookieを送信するために必要
             body: formData
         });
         
@@ -133,7 +131,9 @@ class ApiClient {
             url.searchParams.append('limit', params.limit);
         }
         
-        const response = await fetch(url);
+        const response = await fetch(url, {
+            credentials: 'include'  // Cookieを送信するために必要
+        });
         
         if (!response.ok) {
             throw new Error('動画一覧の取得に失敗しました');
@@ -144,7 +144,9 @@ class ApiClient {
 
     // 動画詳細取得
     async getVideo(videoId) {
-        const response = await fetch(`${this.baseUrl}/videos/${videoId}`);
+        const response = await fetch(`${this.baseUrl}/videos/${videoId}`, {
+            credentials: 'include'  // Cookieを送信するために必要
+        });
         
         if (!response.ok) {
             throw new Error('動画情報の取得に失敗しました');
@@ -158,6 +160,7 @@ class ApiClient {
         const response = await fetch(`${this.baseUrl}/comments/`, {
             method: 'POST',
             headers: this.getAuthHeaders(),
+            credentials: 'include',  // Cookieを送信するために必要
             body: JSON.stringify(commentData)
         });
         
@@ -170,10 +173,26 @@ class ApiClient {
 
     // コメント一覧取得
     async getComments(videoId) {
-        const response = await fetch(`${this.baseUrl}/videos/${videoId}/comments`);
+        const response = await fetch(`${this.baseUrl}/videos/${videoId}/comments`, {
+            credentials: 'include'  // Cookieを送信するために必要
+        });
         
         if (!response.ok) {
             throw new Error('コメント一覧の取得に失敗しました');
+        }
+        
+        return await response.json();
+    }
+
+    // ログアウト
+    async logout() {
+        const response = await fetch(`${this.baseUrl}/auth/logout`, {
+            method: 'POST',
+            credentials: 'include'  // Cookieを送信するために必要
+        });
+        
+        if (!response.ok) {
+            throw new Error('ログアウトに失敗しました');
         }
         
         return await response.json();
