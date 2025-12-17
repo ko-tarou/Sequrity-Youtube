@@ -3,8 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const channelSection = document.getElementById('channel-section');
     const noChannelSection = document.getElementById('no-channel-section');
     
-    logoutBtn.addEventListener('click', function() {
-        localStorage.removeItem('token');
+    logoutBtn.addEventListener('click', async function() {
+        try {
+            await apiClient.logout();
+        } catch (error) {
+            console.error('ログアウトエラー:', error);
+        }
         localStorage.removeItem('user');
         localStorage.removeItem('channel');
         window.location.href = 'index.html';

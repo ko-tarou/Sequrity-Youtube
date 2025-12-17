@@ -263,19 +263,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // 認証状態の管理
-    function checkAuthStatus() {
-        const token = localStorage.getItem('token');
-        const user = JSON.parse(localStorage.getItem('user') || 'null');
-        
-        if (token && user) {
-            // ログイン済み
+    async function checkAuthStatus() {
+        try {
+            const currentUser = await apiClient.getCurrentUser();
+            // 認証成功
+            localStorage.setItem('user', JSON.stringify(currentUser));
             loginBtn.style.display = 'none';
             logoutBtn.style.display = 'block';
             profileLink.style.display = 'block';
             commentForm.style.display = 'block';
             loginPrompt.style.display = 'none';
-        } else {
-            // 未ログイン
+        } catch (error) {
+            // 認証失敗 - 未ログイン
+            localStorage.removeItem('user');
             loginBtn.style.display = 'block';
             logoutBtn.style.display = 'none';
             profileLink.style.display = 'none';
@@ -473,8 +473,13 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ログアウトボタンの処理
-    logoutBtn.addEventListener('click', function() {
-        localStorage.removeItem('token');
+    logoutBtn.addEventListener('click', async function() {
+        try {
+            await apiClient.logout();
+        } catch (error) {
+            console.error('ログアウトエラー:', error);
+        }
+        // localStorageをクリア
         localStorage.removeItem('user');
         localStorage.removeItem('channel');
         window.location.href = 'index.html';

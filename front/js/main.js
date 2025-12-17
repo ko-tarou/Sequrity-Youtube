@@ -39,12 +39,13 @@ function getSafeImageUrl(url, defaultUrl = 'https://via.placeholder.com/300x180'
 }
 
 // 認証状態の管理
-function checkAuthStatus() {
-    const token = localStorage.getItem('token');
-    const user = JSON.parse(localStorage.getItem('user') || 'null');
+async function checkAuthStatus() {
     const channel = JSON.parse(localStorage.getItem('channel') || 'null');
     
-    if (token && user) {
+    try {
+        const currentUser = await apiClient.getCurrentUser();
+        localStorage.setItem('user', JSON.stringify(currentUser));
+        
         // ログイン済み
         if (loginBtn) loginBtn.style.display = 'none';
         if (logoutBtn) logoutBtn.style.display = 'block';
@@ -59,8 +60,9 @@ function checkAuthStatus() {
             if (channelLink) channelLink.style.display = 'none';
             if (channelCreateSection) channelCreateSection.style.display = 'none';
         }
-    } else {
-        // ゲストモード（ログインなしでも動画閲覧可能）
+    } catch (error) {
+        // 認証失敗 - ゲストモード
+        localStorage.removeItem('user');
         if (loginBtn) loginBtn.style.display = 'block';
         if (logoutBtn) logoutBtn.style.display = 'none';
         if (profileLink) profileLink.style.display = 'none';
@@ -79,8 +81,12 @@ if (loginBtn) {
 
 // ログアウトボタンの処理
 if (logoutBtn) {
-    logoutBtn.addEventListener('click', function() {
-        localStorage.removeItem('token');
+    logoutBtn.addEventListener('click', async function() {
+        try {
+            await apiClient.logout();
+        } catch (error) {
+            console.error('ログアウトエラー:', error);
+        }
         localStorage.removeItem('user');
         localStorage.removeItem('channel');
         window.location.href = 'index.html';
@@ -126,7 +132,6 @@ if (loginForm) {
             const response = await apiClient.login(email, password);
             
             // ログイン成功時の処理
-            localStorage.setItem('token', response.access_token);
             localStorage.setItem('user', JSON.stringify(response.user));
             
             // ページをリロードして認証状態を更新
