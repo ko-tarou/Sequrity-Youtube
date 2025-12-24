@@ -390,12 +390,18 @@ document.addEventListener('DOMContentLoaded', function() {
                     channelName.textContent = video.channel || 'Unknown Channel';
                     channelAvatar.src = video.channelicon || 'https://via.placeholder.com/40x40';
                     
-                    document.getElementById('video-views').innerHTML = `
-                        <i class="fas fa-eye"></i> ${video.views || 0} 回視聴
-                    `;
-                    document.getElementById('video-date').innerHTML = `
-                        <i class="fas fa-calendar"></i> ${video.upload_date || video.uploadDate || '2024年1月1日'}
-                    `;
+                    const viewsEl = document.getElementById('video-views');
+                    viewsEl.innerHTML = ''; // Clear existing content
+                    const eyeIcon = document.createElement('i');
+                    eyeIcon.className = 'fas fa-eye';
+                    viewsEl.appendChild(eyeIcon);
+                    viewsEl.appendChild(document.createTextNode(` ${video.views || 0} 回視聴`));
+                    const dateEl = document.getElementById('video-date');
+                    dateEl.innerHTML = ''; // Clear existing content
+                    const calendarIcon = document.createElement('i');
+                    calendarIcon.className = 'fas fa-calendar';
+                    dateEl.appendChild(calendarIcon);
+                    dateEl.appendChild(document.createTextNode(` ${video.upload_date || video.uploadDate || '2024年1月1日'}`));
 
                     document.getElementById('like-count').textContent = video.likes || 0;
                     document.getElementById('dislike-count').textContent = video.dislikes || 0;
@@ -448,22 +454,51 @@ document.addEventListener('DOMContentLoaded', function() {
     async function loadComments() {
         try {
             const comments = await apiClient.getComments(videoId);
-            commentsList.innerHTML = comments.map(comment => `
-                <div class="comment">
-                    <div class="comment-author">ユーザーID: ${comment.write_user_id}</div>
-                    <div class="comment-text">${comment.comment_text || 'コメントなし'}</div>
-                    <div class="comment-date">2024年1月1日</div>
-                </div>
-            `).join('');
+            commentsList.innerHTML = '';
+            comments.forEach(comment => {
+                const commentEl = document.createElement('div');
+                commentEl.className = 'comment';
+                
+                const authorEl = document.createElement('div');
+                authorEl.className = 'comment-author';
+                authorEl.textContent = `ユーザーID: ${comment.write_user_id}`;
+                
+                const textEl = document.createElement('div');
+                textEl.className = 'comment-text';
+                textEl.textContent = comment.comment_text || 'コメントなし';
+                
+                const dateEl = document.createElement('div');
+                dateEl.className = 'comment-date';
+                dateEl.textContent = '2024年1月1日';
+                
+                commentEl.appendChild(authorEl);
+                commentEl.appendChild(textEl);
+                commentEl.appendChild(dateEl);
+                
+                commentsList.appendChild(commentEl);
+            });
         } catch (error) {
             // APIから取得できない場合はダミーデータを表示
-            commentsList.innerHTML = `
-                <div class="comment">
-                    <div class="comment-author">ユーザー名</div>
-                    <div class="comment-text">素晴らしい動画ですね！</div>
-                    <div class="comment-date">2024年1月1日</div>
-                </div>
-            `;
+            const dummyComment = document.createElement('div');
+            dummyComment.className = 'comment';
+            
+            const dummyAuthor = document.createElement('div');
+            dummyAuthor.className = 'comment-author';
+            dummyAuthor.textContent = 'ユーザー名';
+            
+            const dummyText = document.createElement('div');
+            dummyText.className = 'comment-text';
+            dummyText.textContent = '素晴らしい動画ですね！';
+            
+            const dummyDate = document.createElement('div');
+            dummyDate.className = 'comment-date';
+            dummyDate.textContent = '2024年1月1日';
+            
+            dummyComment.appendChild(dummyAuthor);
+            dummyComment.appendChild(dummyText);
+            dummyComment.appendChild(dummyDate);
+            
+            commentsList.appendChild(dummyComment);
         }
     }
 
